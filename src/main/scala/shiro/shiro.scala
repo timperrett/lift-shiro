@@ -17,8 +17,12 @@ object Shiro extends Factory {
     LiftRules.loggedInTest = Full(() => SecurityUtils.getSubject.isAuthenticated)
     
     LiftRules.snippetDispatch.append {
-	  case "subject" | "Subject" | "subjects" | "Subjects" => Subjects
-	}
+      case "has_role" | "hasRole" | "HasRole" => HasRole
+      case "lacks_role" | "lacksRole" | "LacksRole" => LacksRole
+      case "has_permission" | "hasPermission" | "HasPermission" => HasPermission
+      case "lacks_permission" | "lacksPermission" | "LacksPermission" => LacksPermission
+      case "has_any_roles" | "hasAnyRoles" | "HasAnyRoles" => HasAnyRoles
+    }
   }
   
   def init(){ 

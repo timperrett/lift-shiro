@@ -48,32 +48,32 @@ sealed trait Utils {
     } yield xhtml) getOrElse NodeSeq.Empty
 }
 
-object Subjects extends DispatchSnippet with Utils {
-  def dispatch = {
-    case "has_role" => hasRole _
-    case "lacks_role" => lacksRole _
-    case "has_permission" => hasPermission _
-    case "lacks_permission" => lacksPermission _
-    case "has_any_roles" => hasAnyRoles _
-  }
-  
-  def hasRole(xhtml: NodeSeq): NodeSeq = serve(xhtml){ 
+object HasRole extends SubjectSnippet {
+  def render(xhtml: NodeSeq): NodeSeq = serve(xhtml){ 
     (s,r) => s.hasRole(r)
   }
-  
-  def lacksRole(xhtml: NodeSeq): NodeSeq = serve(xhtml){
+}
+
+object LacksRole extends SubjectSnippet {
+  def render(xhtml: NodeSeq): NodeSeq = serve(xhtml){
     (s,r) => !s.hasRole(r)
   }
+}
 
-  def hasPermission(xhtml: NodeSeq): NodeSeq = serve(xhtml){
+object HasPermission extends SubjectSnippet {
+  def render(xhtml: NodeSeq): NodeSeq = serve(xhtml){
     (s,p) => s.isPermitted(p)
   }
-  
-  def lacksPermission(xhtml: NodeSeq): NodeSeq = serve(xhtml){
+}
+
+object LacksPermission extends SubjectSnippet {
+  def render(xhtml: NodeSeq): NodeSeq = serve(xhtml){
     (s,p) => !s.isPermitted(p)
   }
-  
-  def hasAnyRoles(xhtml: NodeSeq): NodeSeq = {
+}
+
+object HasAnyRoles extends SubjectSnippet {
+  def render(xhtml: NodeSeq): NodeSeq = {
     val delimiter = ","
     serve("roles", xhtml){ (s,roles) => 
       roles.split(delimiter).map(
@@ -82,16 +82,9 @@ object Subjects extends DispatchSnippet with Utils {
   }
 }
 
-import net.liftweb._, util.Helpers._, http.{DispatchSnippet,SHtml}
-import org.apache.shiro.authc.UsernamePasswordToken
-
-trait DefaultUsernamePasswordLogin extends DispatchSnippet with SubjectLifeCycle {
-  def render = {
-    var username = ""
-    var password = ""
-    "type=text" #> SHtml.text(username, username = _) &
-    "type=password" #> SHtml.password(password, password = _) &
-    "type=submit" #> SHtml.submit("Login", () => 
-      login(new UsernamePasswordToken(username, password)))
+trait SubjectSnippet extends DispatchSnippet with Utils {
+  def dispatch = {
+    case _ => render _
   }
+  def render(xhtml: NodeSeq): NodeSeq
 }

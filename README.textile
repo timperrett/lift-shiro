@@ -60,9 +60,9 @@ There are several <code>LocParam</code> that you can use to augment your <code>M
 
 In addition to using the integration in the SiteMap, you can also use it within your markup using the following snippet technique: 
 
-<pre><code>  <lift:subject.has_role name="someRole">
+<pre><code>  <lift:has_role name="someRole">
     Some content that is only available to users who have the "someRole" role assigned to them
-  </lift:subject.has_role>
+  </lift:has_role>
 </code></pre>
 
 The snippets this integration wires in are the follow (all are methods on subject/subjects):
