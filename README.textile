@@ -80,6 +80,3 @@ h2. FAQ
 * Why did you bother making this? Well MegaProtoUberTron was not really for me, as I don't typically want the user data stored within my application (i.e. im using AD, OpenDirectory etc)
 
 * In that case, why not just make the LDAP connection using javax.naming? Because i'm lazy, and frankly I dont want to have to maintain that code when someone else is already doing it (likely better than I would)
-
-h2. TODO: 
-* Adding REST guards at some point as well.
