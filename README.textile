@@ -1,0 +1,85 @@
+h2. Lift Shiro
+
+This is an initial version of integration between "Apache Shiro":http://shiro.apache.org/ and the "Lift Web framework":http://liftweb.net/. Specifically this integration does not use Shiro's built in web.xml resource filters to control access to URLs... it instead uses Lift's sitemap Locs. In addition it also has a range of snippets for conditionally displaying content based on rules and permissions. 
+
+h2. Usage
+
+First, add the SBT dependency: 
+
+<code>
+  libraryDependencies += "eu.getintheloop" %% "lift-shiro" % "0.0.1"
+</code>
+
+Next, you need to  add this to the web.xml within your project in order to initialise the Shiro context when your application receives a request:
+
+<pre><code>  <listener>
+    <listener-class>org.apache.shiro.web.env.EnvironmentLoaderListener</listener-class>
+  </listener>
+  <filter>
+    <filter-name>ShiroFilter</filter-name>
+    <filter-class>org.apache.shiro.web.servlet.ShiroFilter</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>ShiroFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+</code></pre>
+
+Next, you need to add some configuration to your Boot.scala like so:
+
+<pre><code>class Boot {
+  def boot {
+    import shiro._, Locs._
+    Shiro.init()
+    ...
+  }
+}
+</code></pre>
+
+By default this uses the Shiro <code>IniSecurityManagerFactory</code> meaning you need to supply a shiro.ini at the root of your classpath that uses the Shiro ini configuration style. If however you want to use another security manager, you simply supply it into the init() method like so:
+
+<pre><code>Shiro.init(new IniSecurityManagerFactory("classpath:shiro.ini"))
+</code></pre>
+
+In order to actually use the integration within your sitemap to restrict access to resources, apply it to your SiteMap like so:
+
+<pre><code>LiftRules.setSiteMap(SiteMap(List(
+    Menu("Home") / "index" >> RequireAuthentication,
+    Menu("Role Test") / "restricted" >> RequireAuthentication >> HasRole("admin"),
+    Menu("Login") / "login" >> RequireNoAuthentication
+    ) ::: Shiro.menus: _*
+  ))
+</code></pre>
+
+There are several <code>LocParam</code> that you can use to augment your <code>Menu</code> structure. Specifically you can use:
+
+* <code>RequireAuthentication</code> - Ensures that users are authenticated, irrespective of roles or permissions
+* <code>HasRole("rolename")</code> - Ensures that user has a specific role. 
+* <code>HasPermission("somePermission")</code> - Ensures that user has a specific permission.
+* <code>LacksPermission("permissionName")</code> - Ensures that user _lacks_ a specific permission.
+
+In addition to using the integration in the SiteMap, you can also use it within your markup using the following snippet technique: 
+
+<pre><code>  <lift:has_role name="someRole">
+    Some content that is only available to users who have the "someRole" role assigned to them
+  </lift:has_role>
+</code></pre>
+
+The snippets this integration wires in are:
+
+* has_role
+* lacks_role
+* has_permission
+* lacks_permission
+* has_any_roles
+
+All use the <code>name</code> attribute, with the exception of <code>has_any_roles</code> which takes the <code>roles</code> attribute which contains a comma-delimited list of assigned roles.
+
+h2. FAQ
+
+* Why did you bother making this? Well MegaProtoUberTron was not really for me, as I don't typically want the user data stored within my application (i.e. im using AD, OpenDirectory etc)
+
+* In that case, why not just make the LDAP connection using javax.naming? Because i'm lazy, and frankly I dont want to have to maintain that code when someone else is already doing it (likely better than I would)
+
+h2. TODO: 
+* Adding REST guards at some point as well.
