@@ -19,3 +19,11 @@ libraryDependencies ++= Seq(
 )
 
 resolvers += Resolver.file(".m2", file(Path.userHome+"/.m2/repository"))
+
+publishTo <<= version { (v: String) =>
+  val nexus = "http://nexus.scala-tools.org/content/repositories/"
+  if(v endsWith "-SNAPSHOT") Some("Scala Tools Nexus" at nexus + "snapshots/")
+  else Some("Scala Tools Nexus" at nexus + "releases/")
+}
+
+credentials += Credentials(Path.userHome / ".ivy2" / ".credentials")

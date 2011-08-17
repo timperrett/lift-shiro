@@ -7,7 +7,7 @@ h2. Usage
 First, add the SBT dependency: 
 
 <code>
-  libraryDependencies += "eu.getintheloop" %% "lift-shiro" % "0.0.1"
+  libraryDependencies += "eu.getintheloop" %% "lift-shiro" % "0.0.2-SNAPSHOT"
 </code>
 
 Next, you need to  add this to the web.xml within your project in order to initialise the Shiro context when your application receives a request:
@@ -29,7 +29,8 @@ Next, you need to add some configuration to your Boot.scala like so:
 
 <pre><code>class Boot {
   def boot {
-    import shiro._, Locs._
+    import shiro.Shiro
+    import shiro.sitemap.Locs._
     Shiro.init()
     ...
   }
