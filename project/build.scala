@@ -11,7 +11,10 @@ object BuildSettings {
     scalaVersion := buildScalaVersion,
     scalacOptions += "-deprecation",
     crossScalaVersions := Seq("2.8.1", "2.9.0", "2.9.0-1"),
-    resolvers += Resolver.file(".m2", file(Path.userHome+"/.m2/repository"))
+    resolvers ++= Seq(
+      Resolver.file(".m2", file(Path.userHome+"/.m2/repository")),
+      "Shiro Snapshots" at "https://repository.apache.org/content/repositories/snapshots/"
+    )
   )
 }
 
