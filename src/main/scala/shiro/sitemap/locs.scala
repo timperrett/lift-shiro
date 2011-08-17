@@ -12,7 +12,8 @@ object Locs {
   import net.liftweb.http.{RedirectResponse, RedirectWithState, S, RedirectState}
   import net.liftweb.sitemap.{Menu,Loc}
   import net.liftweb.sitemap.Loc.{If,EarlyResponse,Unless,Hidden,Link}
-  import org.apache.shiro.SecurityUtils
+  import shiro.Utils._
+  // import org.apache.shiro.SecurityUtils
   
   implicit def listToPath(in: List[String]): String = in.mkString("/","/","")
   
@@ -29,11 +30,11 @@ object Locs {
     RedirectWithState(indexURL, RedirectState(() => S.error(message)))
   
   val RequireAuthentication = If(
-    () => SecurityUtils.getSubject.isAuthenticated, 
+    () => isAuthenticated, 
     () => RedirectBackToReferrer)
   
   val RequireNoAuthentication = Unless(
-    () => SecurityUtils.getSubject.isAuthenticated,
+    () => isAuthenticated,
     () => RedirectBackToReferrer)
   
   def logoutMenu = Menu(Loc("Logout", logoutURL, 
@@ -41,20 +42,23 @@ object Locs {
   
   private val logoutLocParams = RequireAuthentication :: 
     EarlyResponse(() => {
-      val subject = SecurityUtils.getSubject
-      if(subject.isAuthenticated){ subject.logout() }
+      if(isAuthenticated){ subject.logout() }
       Full(RedirectResponse(Shiro.indexURL.vend))
     }) :: Nil
   
   def HasRole(role: String) = 
-    If(() => SecurityUtils.getSubject.hasRole(role), 
+    If(() => hasRole(role), 
       DisplayError("You are the wrong role to access that resource."))
-
+  
+  def LacksRole(role: String) = 
+    If(() => lacksRole(role),
+      DisplayError("You lack the sufficient role to access that resource."))
+  
   def HasPermission(permission: String) = 
-    If(() => SecurityUtils.getSubject.isPermitted(permission), 
+    If(() => hasPermission(permission), 
       DisplayError("Insufficient permissions to access that resource."))
 
   def LacksPermission(permission: String) = 
-    If(() => !SecurityUtils.getSubject.isPermitted(permission), 
+    If(() => lacksPermission(permission), 
       DisplayError("Overqualified permissions to access that resource."))
 }
