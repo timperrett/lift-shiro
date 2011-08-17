@@ -12,9 +12,13 @@ import org.apache.shiro.subject.Subject
 
 object Shiro extends Factory {
   def init(factory: ShiroFactory[SecurityManager]){
+    
+    import Utils._
+    import shiro.snippet.{HasRole,LacksRole,HasPermission,LacksPermission,HasAnyRoles}
+    
     SecurityUtils.setSecurityManager(factory.getInstance);
     
-    LiftRules.loggedInTest = Full(() => SecurityUtils.getSubject.isAuthenticated)
+    LiftRules.loggedInTest = Full(() => isAuthenticated)
     
     LiftRules.snippetDispatch.append {
       case "has_role" | "hasRole" | "HasRole" => HasRole
@@ -33,6 +37,7 @@ object Shiro extends Factory {
    * Speedy setup helpers
    */
   import net.liftweb.sitemap.Menu
+  import shiro.sitemap.Locs
   
   def menus: List[Menu] = sitemap
   private lazy val sitemap = List(Locs.logoutMenu)

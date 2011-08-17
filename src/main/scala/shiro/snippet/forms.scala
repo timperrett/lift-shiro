@@ -1,9 +1,9 @@
-package shiro
+package shiro.snippet
 
 import net.liftweb._, util.Helpers._, http.{DispatchSnippet,SHtml}
 import org.apache.shiro.authc.UsernamePasswordToken
 
-trait DefaultUsernamePasswordLogin extends DispatchSnippet with SubjectLifeCycle {
+trait DefaultUsernamePasswordLogin extends DispatchSnippet with shiro.SubjectLifeCycle {
   def render = {
     var username = ""
     var password = ""

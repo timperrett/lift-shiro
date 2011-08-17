@@ -1,7 +1,8 @@
-package shiro
+package shiro.sitemap
 
 import org.apache.shiro.SecurityUtils
 import net.liftweb.http.S
+import shiro.{Shiro,LoginRedirect}
 
 /**
  * Lift SiteMap Integration
