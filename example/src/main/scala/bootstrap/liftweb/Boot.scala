@@ -14,7 +14,7 @@ class Boot {
     LiftRules.setSiteMap(SiteMap(List(
       Menu("Home") / "index" >> RequireAuthentication,
       Menu("Role Test") / "restricted" >> RequireAuthentication >> HasRole("admin"),
-      Menu("Login") / "login" >> RequireNoAuthentication
+      Menu("Login") / "login" >> DefaultLogin >> RequireNoAuthentication
       ) ::: Shiro.menus: _*
     ))
   }

@@ -11,7 +11,7 @@ object Locs {
   import net.liftweb.common.{Full,Box}
   import net.liftweb.http.{RedirectResponse, RedirectWithState, S, RedirectState}
   import net.liftweb.sitemap.{Menu,Loc}
-  import net.liftweb.sitemap.Loc.{If,EarlyResponse,Unless,Hidden,Link}
+  import net.liftweb.sitemap.Loc.{If,EarlyResponse,Unless,Hidden,Link,DispatchLocSnippets}
   import shiro.Utils._
   // import org.apache.shiro.SecurityUtils
   
@@ -45,6 +45,14 @@ object Locs {
       if(isAuthenticated){ subject.logout() }
       Full(RedirectResponse(Shiro.indexURL.vend))
     }) :: Nil
+  
+  object DefaultLogin
+    extends DispatchLocSnippets 
+    with shiro.snippet.DefaultUsernamePasswordLogin { 
+    def dispatch = { 
+      case "login" => render 
+    }
+  }
   
   def HasRole(role: String) = 
     If(() => hasRole(role), 

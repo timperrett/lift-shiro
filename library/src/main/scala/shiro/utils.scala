@@ -4,11 +4,15 @@ object Utils extends Utils
 private[shiro] trait Utils {
   import org.apache.shiro.SecurityUtils
   import org.apache.shiro.subject.Subject
+  import net.liftweb.common.Box
   
   implicit def subject = SecurityUtils.getSubject
   
   private def test(f: Subject => Boolean)(implicit subject: Subject): Boolean =
     f(subject)
+  
+  def principal[T]: Box[T] = 
+    Box !! subject.getPrincipal.asInstanceOf[T]
   
   def isAuthenticated = 
     test { _.isAuthenticated }
