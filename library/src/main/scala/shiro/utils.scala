@@ -52,8 +52,8 @@ trait SubjectLifeCycle {
     def redirect = S.redirectTo(LoginRedirect.is.openOr("/"))
     if(!isAuthenticated){
       
-      println("~~~~~~")
-      println(isAuthenticated)
+      // println("~~~~~~")
+      // println(isAuthenticated)
       
       tryo(subject.login(token)) match {
         case Failure(_,Full(err),_) => err match {
