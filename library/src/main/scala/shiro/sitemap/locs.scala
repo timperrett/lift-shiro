@@ -1,6 +1,5 @@
 package shiro.sitemap
 
-import org.apache.shiro.SecurityUtils
 import net.liftweb.http.S
 import shiro.{Shiro,LoginRedirect}
 
@@ -8,12 +7,11 @@ import shiro.{Shiro,LoginRedirect}
  * Lift SiteMap Integration
  */
 object Locs {
-  import net.liftweb.common.{Full,Box}
+  import net.liftweb.common.{Full}
   import net.liftweb.http.{RedirectResponse, RedirectWithState, S, RedirectState}
   import net.liftweb.sitemap.{Menu,Loc}
-  import net.liftweb.sitemap.Loc.{If,EarlyResponse,Unless,Hidden,Link,DispatchLocSnippets}
+  import net.liftweb.sitemap.Loc.{If,EarlyResponse,DispatchLocSnippets}
   import shiro.Utils._
-  // import org.apache.shiro.SecurityUtils
   
   implicit def listToPath(in: List[String]): String = in.mkString("/","/","")
   
@@ -26,6 +24,10 @@ object Locs {
     RedirectWithState(loginURL, RedirectState(() => { LoginRedirect.set(uri) }))
   }
   
+  def RedirectToIndexURL = {
+    RedirectResponse(indexURL)
+  }
+  
   private def DisplayError(message: String) = () => 
     RedirectWithState(indexURL, RedirectState(() => S.error(message)))
   
@@ -33,9 +35,9 @@ object Locs {
     () => isAuthenticated, 
     () => RedirectBackToReferrer)
   
-  val RequireNoAuthentication = Unless(
-    () => isAuthenticated,
-    () => RedirectBackToReferrer)
+  val RequireNoAuthentication = If(
+    () => !isAuthenticated,
+    () => RedirectToIndexURL)
   
   def logoutMenu = Menu(Loc("Logout", logoutURL, 
     S.??("logout"), logoutLocParams))
