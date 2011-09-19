@@ -7,7 +7,7 @@ import shiro.{Shiro,LoginRedirect}
  * Lift SiteMap Integration
  */
 object Locs {
-  import net.liftweb.common.{Full}
+  import net.liftweb.common.Full
   import net.liftweb.http.{RedirectResponse, RedirectWithState, S, RedirectState}
   import net.liftweb.sitemap.{Menu,Loc}
   import net.liftweb.sitemap.Loc.{If,EarlyResponse,DispatchLocSnippets}
@@ -24,9 +24,7 @@ object Locs {
     RedirectWithState(loginURL, RedirectState(() => { LoginRedirect.set(uri) }))
   }
   
-  def RedirectToIndexURL = {
-    RedirectResponse(indexURL)
-  }
+  def RedirectToIndexURL = RedirectResponse(indexURL)
   
   private def DisplayError(message: String) = () => 
     RedirectWithState(indexURL, RedirectState(() => S.error(message)))
