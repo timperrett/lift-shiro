@@ -23,7 +23,7 @@ object BuildSettings {
   ) ++ posterousSettings
 }
 
-object SudsBuild extends Build {
+object LiftShiroBuild extends Build {
   lazy val root = Project("lift-shiro-root", file("."),
     settings = BuildSettings.buildSettings ++ Seq(
       name in Posterous := "Lift Shiro",
