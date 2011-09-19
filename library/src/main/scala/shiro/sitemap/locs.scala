@@ -37,6 +37,14 @@ object Locs {
     () => !isAuthenticated,
     () => RedirectToIndexURL)
   
+  val RequireRemembered = If(
+    () => isRemembered || isAuthenticated,
+    () => RedirectBackToReferrer)
+  
+  val RequireNoRemembered = If(
+    () => !(isRemembered || isAuthenticated),
+    () => RedirectToIndexURL)
+  
   def logoutMenu = Menu(Loc("Logout", logoutURL, 
     S.??("logout"), logoutLocParams))
   
