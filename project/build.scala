@@ -3,8 +3,8 @@ import posterous.Publish._
 
 object BuildSettings {
   val buildOrganization = "eu.getintheloop"
-  val buildVersion      = "0.0.3"
-  val buildScalaVersion = "2.9.0-1"
+  val buildVersion      = "0.0.4-SNAPSHOT"
+  val buildScalaVersion = "2.9.1"
 
   val buildSettings = Defaults.defaultSettings ++ Seq (
     organization := buildOrganization,
@@ -27,7 +27,7 @@ object SudsBuild extends Build {
   lazy val root = Project("lift-shiro-root", file("."),
     settings = BuildSettings.buildSettings ++ Seq(
       name in Posterous := "Lift Shiro",
-      version in Posterous := "0.0.3"
+      version in Posterous := "0.0.4"
     )
   ) aggregate(library, example)
   
