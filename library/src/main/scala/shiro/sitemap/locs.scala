@@ -37,12 +37,20 @@ object Locs {
     () => !isAuthenticated,
     () => RedirectToIndexURL)
   
+  val RequireRemembered = If(
+    () => isRemembered || isAuthenticated,
+    () => RedirectBackToReferrer)
+  
+  val RequireNotRemembered = If(
+    () => !(isRemembered || isAuthenticated),
+    () => RedirectToIndexURL)
+  
   def logoutMenu = Menu(Loc("Logout", logoutURL, 
     S.??("logout"), logoutLocParams))
   
-  private val logoutLocParams = RequireAuthentication :: 
+  private val logoutLocParams = RequireRemembered :: 
     EarlyResponse(() => {
-      if(isAuthenticated){ subject.logout() }
+        if(isAuthenticated || isRemembered){ subject.logout() }
       Full(RedirectResponse(Shiro.indexURL.vend))
     }) :: Nil
   

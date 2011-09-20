@@ -17,6 +17,9 @@ private[shiro] trait Utils {
   def isAuthenticated = 
     test { _.isAuthenticated }
   
+  def isRemembered =
+    test { _.isRemembered }
+  
   def hasRole(role: String) = 
     test { _.hasRole(role) }
   
@@ -35,10 +38,9 @@ private[shiro] trait Utils {
   }
 }
 
-
-import net.liftweb._, 
-  common.{Box,Failure,Full,Empty}, 
-  util.Helpers.tryo, http.S
+import net.liftweb.common.{Box,Failure,Full}
+import net.liftweb.util.Helpers
+import net.liftweb.http.S
 import org.apache.shiro.authc.{
   AuthenticationToken, IncorrectCredentialsException, UnknownAccountException, 
   LockedAccountException, ExcessiveAttemptsException}
@@ -52,10 +54,7 @@ trait SubjectLifeCycle {
     def redirect = S.redirectTo(LoginRedirect.is.openOr("/"))
     if(!isAuthenticated){
       
-      // println("~~~~~~")
-      // println(isAuthenticated)
-      
-      tryo(subject.login(token)) match {
+      Helpers.tryo(subject.login(token)) match {
         case Failure(_,Full(err),_) => err match {
           case x: UnknownAccountException => 
             S.error("Unkown user account")
