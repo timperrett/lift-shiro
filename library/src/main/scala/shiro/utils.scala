@@ -32,8 +32,10 @@ private[shiro] trait Utils {
   def lacksPermission(permission: String) = 
     !hasPermission(permission)
   
-  def hasAnyRoles(roles: Seq[String]) = 
-    test { subject => roles.map(r => subject.hasRole(r.trim)).contains(true) }
+  def hasAnyRoles(roles: Seq[String]) = test { subject =>
+    roles.map(r => subject.hasRole(r.trim)
+      ).contains(true)
+  }
 }
 
 import net.liftweb.common.{Box,Failure,Full}
@@ -48,7 +50,7 @@ trait SubjectLifeCycle {
   
   protected def logout() = subject.logout
   
-  protected def login[T <: AuthenticationToken](token: T) {
+  protected def login[T <: AuthenticationToken](token: T){
     def redirect = S.redirectTo(LoginRedirect.is.openOr("/"))
     if(!isAuthenticated){
       
