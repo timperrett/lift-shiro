@@ -16,7 +16,7 @@ object BuildSettings {
     resolvers ++= Seq(
       ScalaToolsReleases,
       "Shiro Snapshots" at "https://repository.apache.org/content/repositories/snapshots/",
-      ".m2" at Path.userHome+"/.m2/repository"
+      ".m2" at "file://"+Path.userHome+"/.m2/repository"
     ),
     publishTo := Some("Scala Tools Nexus" at "http://nexus.scala-tools.org/content/repositories/releases/"),
     credentials += Credentials(Path.userHome / ".ivy2" / ".credentials")
@@ -34,10 +34,6 @@ object LiftShiroBuild extends Build {
   lazy val library: Project = Project("lift-shiro", file("library"), 
     settings = BuildSettings.buildSettings ++ (
       libraryDependencies ++= Seq(
-        "joda-time" % "joda-time" % "1.6.2" % "compile",
-        "net.liftweb" %% "lift-common" % "2.4-M4" % "compile",
-        "net.liftweb" %% "lift-util" % "2.4-M4" % "compile",
-        "net.liftweb" %% "lift-json" % "2.4-M4" % "compile",
         "net.liftweb" %% "lift-webkit" % "2.4-M4" % "compile",
         "org.apache.shiro" % "shiro-core" % "1.2.0-SNAPSHOT",
         "org.apache.shiro" % "shiro-web" % "1.2.0-SNAPSHOT",
