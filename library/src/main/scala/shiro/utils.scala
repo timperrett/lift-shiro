@@ -20,6 +20,10 @@ private[shiro] trait Utils {
   def isRemembered =
     test { _.isRemembered }
   
+  def isAuthenticatedOrRemembered = {
+    isAuthenticated || isRemembered
+  }
+  
   def hasRole(role: String) = 
     test { _.hasRole(role) }
   

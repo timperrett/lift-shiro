@@ -2,19 +2,18 @@ package shiro
 
 import net.liftweb.common.{Box,Full,Empty}
 import net.liftweb.util.Helpers
-import net.liftweb.http.{LiftRules, S, SessionVar, RequestVar, Factory}
+import net.liftweb.http.{LiftRules, SessionVar, Factory}
 
 import org.apache.shiro.SecurityUtils
 import org.apache.shiro.util.{Factory => ShiroFactory}
 import org.apache.shiro.config.IniSecurityManagerFactory
 import org.apache.shiro.mgt.SecurityManager
-import org.apache.shiro.subject.Subject
 
 object Shiro extends Factory {
   def init(factory: ShiroFactory[SecurityManager]){
     
     import Utils._
-    import shiro.snippet.{HasRole,LacksRole,HasPermission,LacksPermission,HasAnyRoles}
+    import shiro.snippet._
     
     SecurityUtils.setSecurityManager(factory.getInstance);
     
@@ -26,6 +25,11 @@ object Shiro extends Factory {
       case "has_permission" | "hasPermission" | "HasPermission" => HasPermission
       case "lacks_permission" | "lacksPermission" | "LacksPermission" => LacksPermission
       case "has_any_roles" | "hasAnyRoles" | "HasAnyRoles" => HasAnyRoles
+      case "guest_tag" | "guestTag" | "GuestTag" => GuestTag
+      case "user_tag" | "userTag" | "UserTag" => UserTag
+      case "authenticated_tag" | "authenticatedTag" | "AuthenticatedTag" => AuthenticatedTag
+      case "not_authenticated_tag" | "notAuthenticatedTag" | "NotAuthenticatedTag" => NotAuthenticatedTag
+      case "principal_tag" | "principalTag" | "PrincipalTag" => PrincipalTag
     }
   }
   

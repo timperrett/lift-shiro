@@ -38,11 +38,11 @@ object Locs {
     () => RedirectToIndexURL)
   
   val RequireRemembered = If(
-    () => isRemembered || isAuthenticated,
+    () => isAuthenticatedOrRemembered,
     () => RedirectBackToReferrer)
   
   val RequireNotRemembered = If(
-    () => !(isRemembered || isAuthenticated),
+    () => !isAuthenticatedOrRemembered,
     () => RedirectToIndexURL)
   
   def logoutMenu = Menu(Loc("Logout", logoutURL, 
@@ -50,7 +50,7 @@ object Locs {
   
   private val logoutLocParams = RequireRemembered :: 
     EarlyResponse(() => {
-        if(isAuthenticated || isRemembered){ subject.logout() }
+        if(isAuthenticatedOrRemembered){ subject.logout() }
       Full(RedirectResponse(Shiro.indexURL.vend))
     }) :: Nil
   
@@ -77,4 +77,8 @@ object Locs {
   def LacksPermission(permission: String) = 
     If(() => lacksPermission(permission), 
       DisplayError("Overqualified permissions to access that resource."))
+ 
+  def HasAnyRoles(roles: Seq[String]) = 
+    If(() => hasAnyRoles(roles),
+       DisplayError("You are the wrong role to access that resource."))
 }
