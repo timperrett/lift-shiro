@@ -36,10 +36,8 @@ private[shiro] trait Utils {
   def lacksPermission(permission: String) = 
     !hasPermission(permission)
   
-  def hasAnyRoles(roles: Seq[String]) = test { subject =>
-    roles.map(r => subject.hasRole(r.trim)
-      ).contains(true)
-  }
+  def hasAnyRoles(roles: Seq[String]) = 
+    roles exists (r => hasRole(r.trim))
 }
 
 import net.liftweb.common.{Box,Failure,Full}
