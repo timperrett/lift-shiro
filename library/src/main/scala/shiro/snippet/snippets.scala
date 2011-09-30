@@ -6,13 +6,11 @@ import net.liftweb.util.Helpers._
 import shiro.Utils._
 
 sealed trait ShiroShippet {
-  def serve(xhtml: NodeSeq)(f: Boolean): NodeSeq = 
+  def verification(xhtml: NodeSeq)(f: Boolean): NodeSeq = 
     if (f) xhtml else NodeSeq.Empty
 
-  def serve(xhtml: NodeSeq, attribute: String)(f: String => Boolean): NodeSeq = 
-    (for { 
-      attr <- S.attr(attribute) if f(attr)
-    } yield xhtml) openOr NodeSeq.Empty
+  def serve(xhtml: NodeSeq, attribute: String = "name")(f: String => Boolean): NodeSeq =
+    if (S.attr(attribute) exists f) xhtml else NodeSeq.Empty
 }
 
 trait SubjectSnippet extends DispatchSnippet with ShiroShippet {
@@ -23,25 +21,25 @@ trait SubjectSnippet extends DispatchSnippet with ShiroShippet {
 }
 
 object HasRole extends SubjectSnippet {
-  def render(xhtml: NodeSeq): NodeSeq = serve(xhtml, "name"){ 
+  def render(xhtml: NodeSeq): NodeSeq = serve(xhtml){ 
     hasRole(_)
   }
 }
 
 object LacksRole extends SubjectSnippet {
-  def render(xhtml: NodeSeq): NodeSeq = serve(xhtml, "name"){
+  def render(xhtml: NodeSeq): NodeSeq = serve(xhtml){
     lacksRole(_)
   }
 }
 
 object HasPermission extends SubjectSnippet {
-  def render(xhtml: NodeSeq): NodeSeq = serve(xhtml, "name"){
+  def render(xhtml: NodeSeq): NodeSeq = serve(xhtml){
     hasPermission(_)
   }
 }
 
 object LacksPermission extends SubjectSnippet {
-  def render(xhtml: NodeSeq): NodeSeq = serve(xhtml, "name"){
+  def render(xhtml: NodeSeq): NodeSeq = serve(xhtml){
     lacksPermission(_)
   }
 }
@@ -55,35 +53,27 @@ object HasAnyRoles extends SubjectSnippet {
   }
 }
 
-object GuestTag extends SubjectSnippet {
-  def render(xhtml: NodeSeq): NodeSeq = serve(xhtml){
+object IsGuest extends SubjectSnippet {
+  def render(xhtml: NodeSeq): NodeSeq = verification(xhtml){
     !isAuthenticatedOrRemembered
   }
 }
 
-object UserTag extends SubjectSnippet {
-  def render(xhtml: NodeSeq): NodeSeq = serve(xhtml){
+object IsUser extends SubjectSnippet {
+  def render(xhtml: NodeSeq): NodeSeq = verification(xhtml){
     isAuthenticatedOrRemembered
   }
 }
 
-object AuthenticatedTag extends SubjectSnippet {
-  def render(xhtml: NodeSeq): NodeSeq = serve(xhtml){
+object IsAuthenticated extends SubjectSnippet {
+  def render(xhtml: NodeSeq): NodeSeq = verification(xhtml){
     isAuthenticated
   }
 }
 
-object NotAuthenticatedTag extends SubjectSnippet {
-  def render(xhtml: NodeSeq): NodeSeq = serve(xhtml){
+object IsNotAuthenticated extends SubjectSnippet {
+  def render(xhtml: NodeSeq): NodeSeq = verification(xhtml){
     !isAuthenticated
   }
-}
-
-object PrincipalTag extends DispatchSnippet {
-  def dispatch = {
-    case _ => render
-  }
-  
-  def render = "*" #> (principal openOr S.attr("name").openOr("Principal or default value not found")).toString
 }
 
