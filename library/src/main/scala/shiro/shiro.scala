@@ -25,11 +25,10 @@ object Shiro extends Factory {
       case "has_permission" | "hasPermission" | "HasPermission" => HasPermission
       case "lacks_permission" | "lacksPermission" | "LacksPermission" => LacksPermission
       case "has_any_roles" | "hasAnyRoles" | "HasAnyRoles" => HasAnyRoles
-      case "guest_tag" | "guestTag" | "GuestTag" => GuestTag
-      case "user_tag" | "userTag" | "UserTag" => UserTag
-      case "authenticated_tag" | "authenticatedTag" | "AuthenticatedTag" => AuthenticatedTag
-      case "not_authenticated_tag" | "notAuthenticatedTag" | "NotAuthenticatedTag" => NotAuthenticatedTag
-      case "principal_tag" | "principalTag" | "PrincipalTag" => PrincipalTag
+      case "is_guest" | "isGuest" | "IsGuest" => IsGuest
+      case "is_user" | "isUser" | "IsUser" => IsUser
+      case "is_authenticated" | "isAuthenticated" | "IsAuthenticated" => IsAuthenticated
+      case "is_not_authenticated" | "isNotAuthenticated" | "IsNotAuthenticated" => IsNotAuthenticated
     }
   }
   
