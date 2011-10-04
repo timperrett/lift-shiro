@@ -1,30 +1,17 @@
 package shiro.snippet
 
 import scala.xml.NodeSeq
-import net.liftweb.common.{Box,Full,Empty,Failure}
 import net.liftweb.http.{DispatchSnippet,S}
-import net.liftweb.util.Helpers.tryo
-import org.apache.shiro.SecurityUtils
-import org.apache.shiro.subject.Subject
+import net.liftweb.util.Helpers._
 import shiro.Utils._
 
 sealed trait ShiroShippet {
-  def serve(xhtml: NodeSeq, attribute: String = "name")(f: String => Boolean): NodeSeq = 
-    (for { 
-      attr <- S.attr(attribute) if f(attr)
-    } yield xhtml) openOr NodeSeq.Empty
-}
+  def verification(xhtml: NodeSeq)(f: Boolean): NodeSeq = 
+    if (f) xhtml else NodeSeq.Empty
 
-// sealed trait Utils {
-//   protected def serve(xhtml: NodeSeq)(f: (Subject, String) => Boolean): NodeSeq =
-//     serve("name", xhtml)(f)
-//   
-//   protected def serve(attribute: String, xhtml: NodeSeq)(f: (Subject, String) => Boolean): NodeSeq = 
-//     (for {
-//       s <- Box.!!(SecurityUtils.getSubject)
-//       attr <- S.attr(attribute) if f(s,attr)
-//     } yield xhtml) getOrElse NodeSeq.Empty
-// }
+  def serve(xhtml: NodeSeq, attribute: String = "name")(f: String => Boolean): NodeSeq =
+    if (S.attr(attribute) exists f) xhtml else NodeSeq.Empty
+}
 
 trait SubjectSnippet extends DispatchSnippet with ShiroShippet {
   def dispatch = {
@@ -63,6 +50,30 @@ object HasAnyRoles extends SubjectSnippet {
     serve(xhtml, attribute = "roles"){ roles => 
       hasAnyRoles(roles.split(delimiter))
     }
+  }
+}
+
+object IsGuest extends SubjectSnippet {
+  def render(xhtml: NodeSeq): NodeSeq = verification(xhtml){
+    !isAuthenticatedOrRemembered
+  }
+}
+
+object IsUser extends SubjectSnippet {
+  def render(xhtml: NodeSeq): NodeSeq = verification(xhtml){
+    isAuthenticatedOrRemembered
+  }
+}
+
+object IsAuthenticated extends SubjectSnippet {
+  def render(xhtml: NodeSeq): NodeSeq = verification(xhtml){
+    isAuthenticated
+  }
+}
+
+object IsNotAuthenticated extends SubjectSnippet {
+  def render(xhtml: NodeSeq): NodeSeq = verification(xhtml){
+    !isAuthenticated
   }
 }
 
