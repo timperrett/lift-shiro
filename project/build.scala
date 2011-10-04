@@ -1,5 +1,4 @@
 import sbt._, Keys._
-import posterous.Publish._
 
 object BuildSettings {
   val buildOrganization = "eu.getintheloop"
@@ -20,15 +19,12 @@ object BuildSettings {
     ),
     publishTo := Some("Scala Tools Nexus" at "http://nexus.scala-tools.org/content/repositories/releases/"),
     credentials += Credentials(Path.userHome / ".ivy2" / ".credentials")
-  ) ++ posterousSettings
+  )
 }
 
 object LiftShiroBuild extends Build {
   lazy val root = Project("lift-shiro-root", file("."),
-    settings = BuildSettings.buildSettings ++ Seq(
-      name in Posterous := "Lift Shiro",
-      version in Posterous := "0.0.4"
-    )
+    settings = BuildSettings.buildSettings
   ) aggregate(library, example)
   
   lazy val library: Project = Project("lift-shiro", file("library"), 
