@@ -7,7 +7,9 @@ h2. Usage
 First, add the SBT dependency: 
 
 <code>
-  libraryDependencies += "eu.getintheloop" %% "lift-shiro" % "0.0.2-SNAPSHOT"
+  libraryDependencies += "eu.getintheloop" %% "lift-shiro" % "0.0.3"
+  
+  resolvers += "apache.repo" at "https://repository.apache.org/content/repositories/snapshots/"
 </code>
 
 Next, you need to  add this to the web.xml within your project in order to initialise the Shiro context when your application receives a request:
