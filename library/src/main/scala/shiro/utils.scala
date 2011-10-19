@@ -38,6 +38,9 @@ private[shiro] trait Utils {
   
   def hasAnyRoles(roles: Seq[String]) = 
     roles exists (r => hasRole(r.trim))
+    
+  def hasAllRoles(roles: Seq[String]) = 
+    roles forall(r => hasRole(r.trim))
 }
 
 import net.liftweb.common.{Box,Failure,Full}

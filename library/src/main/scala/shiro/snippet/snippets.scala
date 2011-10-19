@@ -45,12 +45,17 @@ object LacksPermission extends SubjectSnippet {
 }
 
 object HasAnyRoles extends SubjectSnippet {
-  def render(xhtml: NodeSeq): NodeSeq = {
-    val delimiter = ","
+  def render(xhtml: NodeSeq): NodeSeq = 
     serve(xhtml, attribute = "roles"){ roles => 
-      hasAnyRoles(roles.split(delimiter))
+      hasAnyRoles(roles.split(","))
     }
-  }
+}
+
+object HasAllRoles extends SubjectSnippet {
+  def render(xhtml: NodeSeq): NodeSeq = 
+    serve(xhtml, attribute = "roles"){ roles => 
+      hasAllRoles(roles.split(","))
+    }
 }
 
 object IsGuest extends SubjectSnippet {
