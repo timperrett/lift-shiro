@@ -57,6 +57,9 @@ In order to actually use the integration within your sitemap to restrict access 
 There are several <code>LocParam</code> that you can use to augment your <code>Menu</code> structure. Specifically you can use:
 
 * <code>RequireAuthentication</code> - Ensures that users are authenticated, irrespective of roles or permissions
+* <code>RequireNoAuthentication</code> - Ensures public access (read: guest subject)
+* <code>RequireRemembered</code> - Ensure that this subject is authenticated or remembered
+* <code>RequireNotRemembered</code> - Ensure that the subject is *not* authenticated or remembered
 * <code>HasRole("rolename")</code> - Ensures that user has a specific role. 
 * <code>HasPermission("somePermission")</code> - Ensures that user has a specific permission.
 * <code>LacksPermission("permissionName")</code> - Ensures that user _lacks_ a specific permission.
@@ -75,6 +78,10 @@ The snippets this integration wires in are the follow (all are methods on subjec
 * has_permission
 * lacks_permission
 * has_any_roles
+* is_guest
+* is_user
+* is_authenticated
+* is_not_authenticated
 
 All use the <code>name</code> attribute, with the exception of <code>has_any_roles</code> which takes the <code>roles</code> attribute which contains a comma-delimited list of assigned roles.
 
