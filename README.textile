@@ -7,7 +7,7 @@ h2. Usage
 First, add the SBT dependency: 
 
 <pre><code>
-  libraryDependencies += "eu.getintheloop" %% "lift-shiro" % "0.0.3"
+  libraryDependencies += "eu.getintheloop" %% "lift-shiro" % "0.0.4"
   
   resolvers += "apache.repo" at "https://repository.apache.org/content/repositories/snapshots/"
 </code></pre>

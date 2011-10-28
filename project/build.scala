@@ -2,7 +2,7 @@ import sbt._, Keys._
 
 object BuildSettings {
   val buildOrganization = "eu.getintheloop"
-  val buildVersion      = "0.0.4-SNAPSHOT"
+  val buildVersion      = "0.0.4"
   val buildScalaVersion = "2.9.1"
 
   val buildSettings = Defaults.defaultSettings ++ Seq (

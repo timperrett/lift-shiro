@@ -1,0 +1,11 @@
+***YOU MUST USE LIFT 2.4-M4 FOR THIS PLUGIN TO WORK***
+
+This update brings a set of a new possible tags and location parameters that can be applied to the SiteMap for additional functionality. New operations include:
+
+* remember login subjects
+* force forgetting the subject
+* matchers for checking that a subject is one of any of _n_ roles
+* snippet for accessing the subject principal
+
+In addition the build was updated to use SBT 0.11.
+
