@@ -12,7 +12,7 @@ First, add the SBT dependency:
   resolvers += "apache.repo" at "https://repository.apache.org/content/repositories/snapshots/"
 </code></pre>
 
-Next, you need to  add this to the web.xml within your project in order to initialise the Shiro context when your application receives a request:
+Next, you need to  add this to the web.xml within your project in order to initialise the Shiro context when your application receives a request. You need to add this above the lift filter and filter-map. Otherwise, login redirection will not work. 
 
 <pre><code>  <listener>
     <listener-class>org.apache.shiro.web.env.EnvironmentLoaderListener</listener-class>
