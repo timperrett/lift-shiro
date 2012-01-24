@@ -29,19 +29,19 @@ object Locs {
   private def DisplayError(message: String) = () => 
     RedirectWithState(indexURL, RedirectState(() => S.error(message)))
   
-  val RequireAuthentication = If(
+  def RequireAuthentication = If(
     () => isAuthenticated, 
     () => RedirectBackToReferrer)
   
-  val RequireNoAuthentication = If(
+  def RequireNoAuthentication = If(
     () => !isAuthenticated,
     () => RedirectToIndexURL)
   
-  val RequireRemembered = If(
+  def RequireRemembered = If(
     () => isAuthenticatedOrRemembered,
     () => RedirectBackToReferrer)
   
-  val RequireNotRemembered = If(
+  def RequireNotRemembered = If(
     () => !isAuthenticatedOrRemembered,
     () => RedirectToIndexURL)
   
