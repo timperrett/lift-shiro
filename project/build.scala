@@ -17,8 +17,13 @@ object BuildSettings {
       "Shiro Releases" at "https://repository.apache.org/content/repositories/releases/",
       "Shiro Snapshots" at "https://repository.apache.org/content/repositories/snapshots/"
     ),
-    publishTo := Some("Scala Tools Nexus" at "http://nexus.scala-tools.org/content/repositories/releases/"),
-    credentials += Credentials(Path.userHome / ".ivy2" / ".credentials")
+    publishTo <<= version { (v: String) => 
+      val nexus = "https://oss.sonatype.org/" 
+        if (v.trim.endsWith("SNAPSHOT")) Some("snapshots" at nexus + "content/repositories/snapshots") 
+        else Some("releases" at nexus + "service/local/staging/deploy/maven2") 
+    }, 
+    publishMavenStyle := true,
+    publishArtifact in Test := false
   )
 }
 
