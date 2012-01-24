@@ -2,7 +2,7 @@ import sbt._, Keys._
 
 object BuildSettings {
   val buildOrganization = "eu.getintheloop"
-  val buildVersion      = "0.0.5"
+  val buildVersion      = "0.0.6-SNAPSHOT"
   val buildScalaVersion = "2.9.1"
 
   val buildSettings = Defaults.defaultSettings ++ Seq (
@@ -21,9 +21,31 @@ object BuildSettings {
       val nexus = "https://oss.sonatype.org/" 
         if (v.trim.endsWith("SNAPSHOT")) Some("snapshots" at nexus + "content/repositories/snapshots") 
         else Some("releases" at nexus + "service/local/staging/deploy/maven2") 
-    }, 
+    },
+    credentials += Credentials(Path.userHome / ".ivy2" / ".credentials"),
     publishMavenStyle := true,
-    publishArtifact in Test := false
+    publishArtifact in Test := false,
+    pomIncludeRepository := { repo => false },
+    pomExtra := (
+      <url>https://github.com/timperrett/lift-shiro</url>
+      <licenses>
+        <license>
+          <name>Apache 2.0 License</name>
+          <url>http://www.apache.org/licenses/LICENSE-2.0.html</url>
+          <distribution>repo</distribution>
+        </license>
+      </licenses>
+      <scm>
+        <url>git@github.com:timperrett/lift-shiro.git</url>
+        <connection>scm:git:git@github.com:timperrett/lift-shiro.git</connection>
+      </scm>
+      <developers>
+        <developer>
+          <id>timperrett</id>
+          <name>Timothy Perrett</name>
+          <url>http://timperrett.com</url>
+        </developer>
+      </developers>)
   )
 }
 

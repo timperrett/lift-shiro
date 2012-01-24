@@ -7,9 +7,13 @@ h2. Usage
 First, add the SBT dependency: 
 
 <pre><code>
-  libraryDependencies += "eu.getintheloop" %% "lift-shiro" % "0.0.4"
+  libraryDependencies += "eu.getintheloop" %% "lift-shiro" % "0.0.5"
   
-  resolvers += "apache.repo" at "https://repository.apache.org/content/repositories/snapshots/"
+  resolvers ++= Seq(
+    "apache.repo" at "https://repository.apache.org/content/repositories/snapshots/"
+    "sonatype.repo" at "https://oss.sonatype.org/content/repositories/public/"
+  )
+  
 </code></pre>
 
 Next, you need to  add this to the web.xml within your project in order to initialise the Shiro context when your application receives a request. You need to add this above the lift filter and filter-map. Otherwise, login redirection will not work. 
