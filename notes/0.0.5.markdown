@@ -1,0 +1,13 @@
+This update moves the integration away from snapshot and milestone dependencies and onto the final releases of both Shiro 1.2.0 and Lift 2.4. 
+
+In addition to this, the published JARs no longer sit on scala-tools.org, but rather they live on oss.sonatype.org. Please update your SBT resolver configuration to:
+
+<pre><code>
+  libraryDependencies += "eu.getintheloop" %% "lift-shiro" % "0.0.5"
+  
+  resolvers ++= Seq(
+    "apache.repo" at "https://repository.apache.org/content/repositories/releases/"
+    "sonatype.repo" at "https://oss.sonatype.org/content/repositories/public/"
+  )
+  
+</code></pre>
