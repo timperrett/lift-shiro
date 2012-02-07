@@ -10,7 +10,7 @@ First, add the SBT dependency:
   libraryDependencies += "eu.getintheloop" %% "lift-shiro" % "0.0.5"
   
   resolvers ++= Seq(
-    "apache.repo" at "https://repository.apache.org/content/repositories/snapshots/"
+    "apache.repo" at "https://repository.apache.org/content/repositories/snapshots/",
     "sonatype.repo" at "https://oss.sonatype.org/content/repositories/public/"
   )
   
