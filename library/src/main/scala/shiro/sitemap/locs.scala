@@ -27,7 +27,7 @@ object Locs {
   def RedirectToIndexURL = RedirectResponse(indexURL)
   
   private def DisplayError(message: String) = () => 
-    RedirectWithState(indexURL, RedirectState(() => S.error(message)))
+    RedirectWithState(loginURL, RedirectState(() => S.error(message)))
   
   def RequireAuthentication = If(
     () => isAuthenticated, 
