@@ -3,19 +3,20 @@ import sbt._, Keys._
 object BuildSettings {
   val buildOrganization = "eu.getintheloop"
   val buildVersion      = "0.0.6-SNAPSHOT"
-  val buildScalaVersion = "2.9.1"
+  val buildScalaVersion = "2.9.2"
 
   val buildSettings = Defaults.defaultSettings ++ Seq (
     organization := buildOrganization,
     version      := buildVersion,
     scalaVersion := buildScalaVersion,
-    scalaVersion := "2.9.1",
+    scalaVersion := "2.9.2",
     scalacOptions += "-deprecation",
-    crossScalaVersions := Seq("2.8.1", "2.9.0", "2.9.0-1", "2.9.1"),
+    crossScalaVersions := Seq("2.8.1", "2.9.0", "2.9.0-1", "2.9.1", "2.9.2"),
     resolvers ++= Seq(
       ScalaToolsReleases,
       "Shiro Releases" at "https://repository.apache.org/content/repositories/releases/",
-      "Shiro Snapshots" at "https://repository.apache.org/content/repositories/snapshots/"
+      "Shiro Snapshots" at "https://repository.apache.org/content/repositories/snapshots/",
+      "sonatype.repo" at "https://oss.sonatype.org/content/repositories/public/"
     ),
     publishTo <<= version { (v: String) => 
       val nexus = "https://oss.sonatype.org/" 
@@ -63,7 +64,7 @@ object LiftShiroBuild extends Build {
   lazy val library: Project = Project("lift-shiro", file("library"), 
     settings = BuildSettings.buildSettings ++ (
       libraryDependencies ++= Seq(
-        "net.liftweb" %% "lift-webkit" % "2.4" % "compile",
+        "net.liftweb" %% "lift-webkit" % "2.5-SNAPSHOT" % "compile",
         "org.apache.shiro" % "shiro-core" % "1.2.0",
         "org.apache.shiro" % "shiro-web" % "1.2.0",
         "commons-beanutils" % "commons-beanutils" % "20030211.134440"
