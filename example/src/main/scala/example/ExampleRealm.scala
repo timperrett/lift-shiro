@@ -9,12 +9,15 @@ import org.apache.shiro.subject.PrincipalCollection
 import scala.collection.immutable.{Set, HashMap}
 import scala.collection.JavaConversions._
 
+/**
+ * An example class to demonstrate setting up a custom realm in shiro.
+ */
 class ExampleRealm extends AuthorizingRealm {
   class User(val username: String, val password: String)
 
   /**
    * A fake DAO for storing user credentials, roles, permissions, etc.
-   * In practice this will probably be a db/persistence layer of some sort.
+   * In practice this will probably be a db/persistence obj of some sort.
    */
   object UserDAO {
     // Passwords are stored plain here but in real life please at least BCrypt them like a decent human being.
@@ -37,7 +40,9 @@ class ExampleRealm extends AuthorizingRealm {
     private[this] val rolePermissions = HashMap(
       "admin" -> Set(new WildcardPermission("*")),
       "schwartz" -> Set(new WildcardPermission("lightsaber:*")),
-      "goodguy" -> Set(new WildcardPermission("winnebago:drive:eagle5"))
+      "darklord" -> Set(new WildcardPermission("winnebago:steal:eagle5")),
+      // Good guys can do whatever they want with the eagle5.
+      "goodguy" -> Set(new WildcardPermission("winnebago:*:eagle5"))
     )
 
     def getUser(username: String, password: String): Option[User] = {
