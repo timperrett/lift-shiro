@@ -1,0 +1,81 @@
+package example
+
+import org.apache.shiro.realm.AuthorizingRealm
+import org.apache.shiro.authc._
+import org.apache.shiro.authz._
+import org.apache.shiro.authz.permission.WildcardPermission
+import org.apache.shiro.subject.PrincipalCollection
+
+import scala.collection.immutable.{Set, HashMap}
+import scala.collection.JavaConversions._
+
+class ExampleRealm extends AuthorizingRealm {
+  class User(val username: String, val password: String)
+
+  /**
+   * A fake DAO for storing user credentials, roles, permissions, etc.
+   * In practice this will probably be a db/persistence layer of some sort.
+   */
+  object UserDAO {
+    // Passwords are stored plain here but in real life please at least BCrypt them like a decent human being.
+    private[this] val userCredentials = HashMap(
+      "root" -> "secret",
+      "guest" -> "guest",
+      "presidentskroob" -> "12345",
+      "darkhelmet" -> "ludicrousspeed",
+      "lonestarr" -> "vespa"
+    )
+
+    private[this] val userRoles = HashMap(
+      "root" -> Set("admin"),
+      "guest" -> Set("guest"),
+      "presidentskroob" -> Set("president"),
+      "darkhelmet" -> Set("darklord", "schwartz"),
+      "lonestarr" -> Set("goodguy", "schwartz")
+    )
+
+    private[this] val rolePermissions = HashMap(
+      "admin" -> Set(new WildcardPermission("*")),
+      "schwartz" -> Set(new WildcardPermission("lightsaber:*")),
+      "goodguy" -> Set(new WildcardPermission("winnebago:drive:eagle5"))
+    )
+
+    def getUser(username: String, password: String): Option[User] = {
+      if ((userCredentials contains username) && userCredentials(username) == password)
+        Some(new User(username, password))
+      else 
+        None
+    }
+
+    def getRoles(user: User): Set[String] = {
+      userRoles.getOrElse(user.username, Set())
+    }
+
+    def getRolePermissions(role: String): Set[WildcardPermission] = {
+      rolePermissions.getOrElse(role, Set())
+    }
+  }
+
+  // The methods from AuthorizingRealm that actually have to be implemented.
+
+  def doGetAuthenticationInfo(token: AuthenticationToken): AuthenticationInfo = {
+    val userpassToken = token.asInstanceOf[UsernamePasswordToken]
+    val username = userpassToken.getUsername() 
+    val password = userpassToken.getPassword() 
+
+    UserDAO.getUser(username, password.mkString("")) match {
+      case Some(user: User) => new SimpleAuthenticationInfo(user, user.password, "ExampleRealm")
+      case None => throw new AuthenticationException("Invalid credentials provided!")
+    }
+  }
+
+  def doGetAuthorizationInfo(principals: PrincipalCollection): AuthorizationInfo = {
+    val roles: Set[String] = principals.flatMap(p => UserDAO.getRoles(p.asInstanceOf[User])).toSet
+    val permissions: Set[Permission] = roles.flatMap(r => UserDAO.getRolePermissions(r)).toSet
+
+    val authInfo = new SimpleAuthorizationInfo(roles)
+    authInfo.setObjectPermissions(permissions)
+
+    return authInfo 
+  }
+}
