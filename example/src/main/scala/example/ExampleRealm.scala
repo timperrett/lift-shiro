@@ -6,8 +6,7 @@ import org.apache.shiro.authz._
 import org.apache.shiro.authz.permission.WildcardPermission
 import org.apache.shiro.subject.PrincipalCollection
 
-import scala.collection.immutable.{Set, HashMap}
-import scala.collection.JavaConversions._
+import collection.JavaConverters._
 
 /**
  * An example class to demonstrate setting up a custom realm in shiro.
@@ -21,7 +20,7 @@ class ExampleRealm extends AuthorizingRealm {
    */
   object UserDAO {
     // Passwords are stored plain here but in real life please at least BCrypt them like a decent human being.
-    private[this] val userCredentials = HashMap(
+    private[this] val userCredentials = Map(
       "root" -> "secret",
       "guest" -> "guest",
       "presidentskroob" -> "12345",
@@ -29,7 +28,7 @@ class ExampleRealm extends AuthorizingRealm {
       "lonestarr" -> "vespa"
     )
 
-    private[this] val userRoles = HashMap(
+    private[this] val userRoles = Map(
       "root" -> Set("admin"),
       "guest" -> Set("guest"),
       "presidentskroob" -> Set("president"),
@@ -37,7 +36,7 @@ class ExampleRealm extends AuthorizingRealm {
       "lonestarr" -> Set("goodguy", "schwartz")
     )
 
-    private[this] val rolePermissions = HashMap(
+    private[this] val rolePermissions = Map(
       "admin" -> Set(new WildcardPermission("*")),
       "schwartz" -> Set(new WildcardPermission("lightsaber:*")),
       "darklord" -> Set(new WildcardPermission("winnebago:steal:eagle5")),
@@ -75,11 +74,11 @@ class ExampleRealm extends AuthorizingRealm {
   }
 
   def doGetAuthorizationInfo(principals: PrincipalCollection): AuthorizationInfo = {
-    val roles: Set[String] = principals.flatMap(p => UserDAO.getRoles(p.asInstanceOf[User])).toSet
+    val roles: Set[String] = principals.asScala.flatMap(p => UserDAO.getRoles(p.asInstanceOf[User])).toSet
     val permissions: Set[Permission] = roles.flatMap(r => UserDAO.getRolePermissions(r)).toSet
 
-    val authInfo = new SimpleAuthorizationInfo(roles)
-    authInfo.setObjectPermissions(permissions)
+    val authInfo = new SimpleAuthorizationInfo(roles.asJava)
+    authInfo.setObjectPermissions(permissions.asJava)
 
     return authInfo 
   }
