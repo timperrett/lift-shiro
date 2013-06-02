@@ -1,8 +1,21 @@
-<lift:surround with="default" at="content">
-  <h2>Home</h2>
-  
-  <lift:has_role name="admin">
-    <p>This content is only available for admins</p>
-  </lift:has_role>
-  
-</lift:surround>
+<html>
+  <head>
+    <title>Lift Shiro</title>
+  </head>
+  <body class="lift:content_id=content">
+    <div id="content" data-lift="surround?with=default;at=content">
+      <h2>Home</h2>
+          
+      <div data-lift="has_role?name=admin">
+        <p>This content is only available for admins</p>
+      </div>
+
+      <div data-lift="has_permission?name=winnebago:drive:eagle5">
+        <p>Whoooooosh, you can drive the eagle5!</p>
+      </div>
+      <div data-lift="has_permission?name=winnebago:steal:eagle5">
+        <p>Sneaky sneaky, you can steal the eagle5!</p>
+      </div>
+    </div>
+  </body>
+</html>

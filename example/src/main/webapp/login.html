@@ -1,10 +1,16 @@
-<lift:surround with="default" at="content">
-  <h2>Login</h2>
-  
-  <form lift="login?form=post">
-    <p>Username: <br /><input type="text" /></p>
-    <p>Password: <br /><input type="password" /></p>
-    <p><input type="submit" value="login" /></p>
-  </form>
-  
-</lift:surround>
+<html>
+  <head>
+    <title>Lift Shiro</title>
+  </head>
+  <body class="lift:content_id=content">
+    <div id="content" data-lift="surround?with=default;at=content">
+      <h2>Login</h2>
+      
+      <form data-lift="login?form=post">
+        <p>Username: <br /><input type="text" /></p>
+        <p>Password: <br /><input type="password" /></p>
+        <p><input type="submit" value="login" /></p>
+      </form>
+    </div>
+  </body>
+</html>
