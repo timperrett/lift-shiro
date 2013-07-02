@@ -64,7 +64,7 @@ object LiftShiroBuild extends Build {
   lazy val library: Project = Project("lift-shiro", file("library"), 
     settings = BuildSettings.buildSettings ++ (
       libraryDependencies ++= Seq(
-        "net.liftweb" %% "lift-webkit" % "2.5-M4" % "compile",
+        "net.liftweb" %% "lift-webkit" % "2.5.1" % "compile",
         "org.apache.shiro" % "shiro-core" % "1.2.0",
         "org.apache.shiro" % "shiro-web" % "1.2.0",
         "commons-beanutils" % "commons-beanutils" % "20030211.134440"
