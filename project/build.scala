@@ -10,8 +10,9 @@ object BuildSettings {
     organization := buildOrganization,
     version      := buildVersion,
     scalaVersion := buildScalaVersion,
-    scalaVersion := buildScalaVersion,
-    scalacOptions ++= Seq("-deprecation", "-unchecked", "-language:postfixOps", "-language:implicitConversions", "-language:existentials" ),
+    scalacOptions <<= scalaVersion map { v: String =>
+      val opts = "-deprecation" :: "-unchecked" :: Nil
+      if (v.startsWith("2.9.")) opts else opts ++ ( "-language:implicitConversions" :: "-language:postfixOps" :: Nil)},
     crossScalaVersions := Seq("2.9.1", "2.9.2", "2.10.0"),
     resolvers ++= Seq(
       "CB Central Mirror" at "http://repo.cloudbees.com/content/groups/public",
