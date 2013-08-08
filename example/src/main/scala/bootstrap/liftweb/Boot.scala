@@ -4,9 +4,14 @@ import net.liftweb.http.LiftRules
 import net.liftweb.sitemap._
 import shiro.Shiro
 import shiro.sitemap.Locs._
+import net.liftmodules.FoBoJQ
+
 
 class Boot {
   def boot {
+
+    FoBoJQ.InitParam.JQuery=FoBoJQ.JQuery191
+    FoBoJQ.init()
     Shiro.init()
     
     LiftRules.addToPackages("eu.getintheloop")
