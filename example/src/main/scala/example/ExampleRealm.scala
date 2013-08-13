@@ -44,12 +44,10 @@ class ExampleRealm extends AuthorizingRealm {
       "goodguy" -> Set(new WildcardPermission("winnebago:*:eagle5"))
     )
 
-    def getUser(username: String, password: String): Option[User] = {
-      if ((userCredentials contains username) && userCredentials(username) == password)
-        Some(new User(username, password))
-      else 
-        None
-    }
+    def getUser(username: String, password: String): Option[User] = for {
+      pass <- userCredentials.get(username)
+      if (pass == password)
+    } yield new User(username, password)
 
     def getRoles(user: User): Set[String] = {
       userRoles.getOrElse(user.username, Set())
