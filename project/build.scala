@@ -1,4 +1,5 @@
 import sbt._, Keys._
+import LiftModuleBuild._
 
 
 object BuildSettings {
@@ -7,6 +8,9 @@ object BuildSettings {
   val buildScalaVersion = "2.10.0"
 
   val buildSettings = Defaults.defaultSettings ++ Seq (
+    liftVersion <<= liftVersion ?? "2.5",
+    liftEdition <<= liftVersion apply { _.substring(0,3) },
+    name <<= (name, liftEdition) { (n, e) =>  n + "_" + e },
     organization := buildOrganization,
     version      := buildVersion,
     scalaVersion := buildScalaVersion,
@@ -63,7 +67,7 @@ object BuildSettings {
 
 object LiftShiroBuild extends Build {
 
-  val compileLiftVersion = "2.5"
+  liftVersion ?? "2.5"
 
   lazy val root = Project("lift-shiro-root", file("."),
     settings = BuildSettings.buildSettings ++ Seq(
@@ -74,31 +78,29 @@ object LiftShiroBuild extends Build {
       publishArtifact in (Compile, packageSrc) := false
     )) aggregate(library, example)
 
-  import LiftModuleBuild._
-  
+
   lazy val library: Project = Project("lift-shiro", file("library"), 
     settings = BuildSettings.buildSettings ++ (
       libraryDependencies ++= Seq(
-        "net.liftweb" %% "lift-webkit" % compileLiftVersion % "provided",
         "org.apache.shiro" % "shiro-core" % "1.2.0",
         "org.apache.shiro" % "shiro-web" % "1.2.0",
         "commons-beanutils" % "commons-beanutils" % "20030211.134440"
       )
-    ) ++ Seq (
-      liftVersion <<= liftVersion ?? "2.5",
-      liftEdition <<= liftVersion apply { _.substring(0,3) },
-      name <<= (name, LiftModuleBuild.liftEdition) { (n, e) =>  n + "_" + e }
+    ) ++ Seq(
+      libraryDependencies <+= liftVersion("net.liftweb" %% "lift-webkit" % _ % "provided")
     )
   )
   
   lazy val example = Project("lift-shiro-example", file("example"),
     settings = BuildSettings.buildSettings ++ (
       libraryDependencies ++= Seq(
-        "net.liftweb"       %% "lift-webkit"      % compileLiftVersion % "compile",
         "net.liftmodules"   %% "fobo-jquery_2.5"  % "1.0"              % "compile",
         "org.eclipse.jetty" % "jetty-webapp"      % "7.3.0.v20110203"  % "container",
         "ch.qos.logback"    % "logback-classic"   % "0.9.26"
       )
-    ) ++ com.github.siasia.WebPlugin.webSettings
+    ) ++ Seq(
+      libraryDependencies <+= liftVersion("net.liftweb" %% "lift-webkit" % _ % "compile")
+    ) ++
+      com.github.siasia.WebPlugin.webSettings
   ) dependsOn library
 }
