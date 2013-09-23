@@ -85,7 +85,7 @@ object LiftShiroBuild extends Build {
         "commons-beanutils" % "commons-beanutils" % "20030211.134440"
       )
     ) ++ Seq (
-      liftVersion <<= liftVersion ?? "2.5-SNAPSHOT",
+      liftVersion <<= liftVersion ?? "2.5",
       liftEdition <<= liftVersion apply { _.substring(0,3) },
       name <<= (name, LiftModuleBuild.liftEdition) { (n, e) =>  n + "_" + e }
     )
