@@ -98,7 +98,7 @@ Start the web application:
 > ~container:start
 </code></pre>
 
-Visit the web application at http://localhost:8080.
+Visit the web application at "http://localhost:8080":http://localhost:8080.
 
 h2. FAQ
 
