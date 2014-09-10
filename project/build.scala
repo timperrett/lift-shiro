@@ -11,6 +11,7 @@ object BuildSettings {
     liftVersion <<= liftVersion ?? "2.5",
     liftEdition <<= liftVersion apply { _.substring(0,3) },
     name <<= (name, liftEdition) { (n, e) =>  n + "_" + e },
+    moduleName := name.value,
     organization := buildOrganization,
     version      := buildVersion,
     scalaVersion := buildScalaVersion,
