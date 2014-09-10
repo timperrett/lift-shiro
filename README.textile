@@ -89,6 +89,17 @@ The snippets this integration wires in are the follow (all are methods on subjec
 
 All use the <code>name</code> attribute, with the exception of <code>has_any_roles</code> which takes the <code>roles</code> attribute which contains a comma-delimited list of assigned roles.
 
+h2. Running the example
+
+Start the web application:
+
+<pre><code>sbt
+> project lift-shiro-example
+> ~container:start
+</code></pre>
+
+Visit the web application at http://localhost:8080.
+
 h2. FAQ
 
 * Why did you bother making this? Well MegaProtoUberTron was not really for me, as I don't typically want the user data stored within my application (i.e. im using AD, OpenDirectory etc)
