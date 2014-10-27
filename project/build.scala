@@ -8,7 +8,7 @@ object BuildSettings {
   val buildScalaVersion = "2.10.4"
 
   val buildSettings = Defaults.defaultSettings ++ Seq (
-    liftVersion <<= liftVersion ?? "2.5",
+    liftVersion <<= liftVersion ?? "2.6-RC1",
     liftEdition <<= liftVersion apply { _.substring(0,3) },
     name <<= (name, liftEdition) { (n, e) =>  n + "_" + e },
     moduleName := name.value,
