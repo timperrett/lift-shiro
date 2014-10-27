@@ -1,23 +1,24 @@
 import sbt._, Keys._
 import LiftModuleBuild._
-
+import com.earldouglas.xwp.XwpPlugin._
 
 object BuildSettings {
   val buildOrganization = "eu.getintheloop"
   val buildVersion      = "0.0.8-SNAPSHOT"
-  val buildScalaVersion = "2.10.0"
+  val buildScalaVersion = "2.10.4"
 
   val buildSettings = Defaults.defaultSettings ++ Seq (
-    liftVersion <<= liftVersion ?? "2.5",
+    liftVersion <<= liftVersion ?? "2.6-RC1",
     liftEdition <<= liftVersion apply { _.substring(0,3) },
     name <<= (name, liftEdition) { (n, e) =>  n + "_" + e },
+    moduleName := name.value,
     organization := buildOrganization,
     version      := buildVersion,
     scalaVersion := buildScalaVersion,
     scalacOptions <<= scalaVersion map { v: String =>
       val opts = "-deprecation" :: "-unchecked" :: Nil
       if (v.startsWith("2.9.")) opts else opts ++ ( "-language:implicitConversions" :: "-language:postfixOps" :: Nil)},
-    crossScalaVersions := Seq("2.9.1", "2.9.2", "2.10.0"),
+    crossScalaVersions := Seq("2.9.1", "2.9.2", "2.10.0", "2.10.1", "2.10.2", "2.10.3", "2.10.4"),
     resolvers ++= Seq(
       "CB Central Mirror" at "http://repo.cloudbees.com/content/groups/public",
       "Shiro Releases" at "https://repository.apache.org/content/repositories/releases/",
@@ -95,12 +96,10 @@ object LiftShiroBuild extends Build {
     settings = BuildSettings.buildSettings ++ (
       libraryDependencies ++= Seq(
         "net.liftmodules"   %% "fobo-jquery_2.5"  % "1.0"              % "compile",
-        "org.eclipse.jetty" % "jetty-webapp"      % "7.3.0.v20110203"  % "container",
         "ch.qos.logback"    % "logback-classic"   % "0.9.26"
       )
     ) ++ Seq(
       libraryDependencies <+= liftVersion("net.liftweb" %% "lift-webkit" % _ % "compile")
-    ) ++
-      com.github.siasia.WebPlugin.webSettings
+    ) ++ jetty()
   ) dependsOn library
 }
