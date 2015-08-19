@@ -17,7 +17,7 @@ object BuildSettings {
     scalacOptions <<= scalaVersion map { v: String =>
       val opts = "-deprecation" :: "-unchecked" :: Nil
       if (v.startsWith("2.9.")) opts else opts ++ ( "-language:implicitConversions" :: "-language:postfixOps" :: Nil)},
-    crossScalaVersions := Seq("2.9.1", "2.9.2", "2.10.4"),
+    crossScalaVersions := Seq("2.9.1", "2.9.2", "2.10.4", "2.11.1"),
     resolvers ++= Seq(
       "CB Central Mirror" at "http://repo.cloudbees.com/content/groups/public",
       "Shiro Releases" at "https://repository.apache.org/content/repositories/releases/",
