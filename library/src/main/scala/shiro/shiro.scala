@@ -15,7 +15,7 @@ object Shiro extends Factory {
     import Utils._
     import shiro.snippet._
     
-    SecurityUtils.setSecurityManager(factory.getInstance);
+    SecurityUtils.setSecurityManager(factory.getInstance)
     
     LiftRules.loggedInTest = Full(() => isAuthenticated)
     
