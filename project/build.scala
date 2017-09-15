@@ -5,7 +5,7 @@ import sbtassembly.AssemblyKeys._
 object BuildSettings {
   val buildOrganization = "eu.getintheloop"
   val buildVersion      = "0.0.9-SNAPSHOT"
-  val buildScalaVersion = "2.11.7"
+  val buildScalaVersion = "2.11.8"
 
   val buildSettings = Defaults.defaultSettings ++ Seq (
     liftVersion <<= liftVersion ?? "2.6",
@@ -17,7 +17,7 @@ object BuildSettings {
     scalacOptions <<= scalaVersion map { v: String =>
       val opts = "-deprecation" :: "-unchecked" :: Nil
       if (v.startsWith("2.9.")) opts else opts ++ ( "-language:implicitConversions" :: "-language:postfixOps" :: Nil)},
-    crossScalaVersions := Seq("2.9.1", "2.9.2", "2.10.4", "2.11.1", "2.11.7"),
+    crossScalaVersions := Seq("2.9.1", "2.9.2", "2.10.4", "2.11.1", "2.11.8"),
     resolvers ++= Seq(
       "CB Central Mirror" at "http://repo.cloudbees.com/content/groups/public",
       "Shiro Releases" at "https://repository.apache.org/content/repositories/releases/",
@@ -25,6 +25,7 @@ object BuildSettings {
       "sonatype.repo" at "https://oss.sonatype.org/content/repositories/public/"
     ),
     assemblyJarName in assembly := (moduleName.value + "_" + scalaVersion.value.substring(0,4) + "-" + version.value + ".jar"),
+    assemblyOption  in assembly := (assemblyOption in assembly).value.copy(includeScala = false),
     publishTo <<= version { (v: String) => 
       val nexus = "https://oss.sonatype.org/" 
         if (v.trim.endsWith("SNAPSHOT")) Some("snapshots" at nexus + "content/repositories/snapshots") 
@@ -68,7 +69,7 @@ object BuildSettings {
 
 object LiftShiroBuild extends Build {
 
-  liftVersion ?? "2.6"
+  liftVersion ?? "2.6.3"
 
   lazy val root = Project("lift-shiro-root", file("."),
     settings = BuildSettings.buildSettings ++ Seq(
@@ -83,8 +84,8 @@ object LiftShiroBuild extends Build {
   lazy val library: Project = Project("lift-shiro", file("library"), 
     settings = BuildSettings.buildSettings ++ (
       libraryDependencies ++= Seq(
-        "org.apache.shiro" % "shiro-core" % "1.2.4",
-        "org.apache.shiro" % "shiro-web" % "1.2.4",
+        "org.apache.shiro" % "shiro-core" % "1.3.2",
+        "org.apache.shiro" % "shiro-web"  % "1.3.2",
         "commons-beanutils" % "commons-beanutils" % "1.8.3"
       )
     ) ++ Seq(
@@ -92,7 +93,7 @@ object LiftShiroBuild extends Build {
     )
   )
   
-  lazy val example = Project("lift-shiro-example", file("example"),
+  lazy val example: Project = Project("lift-shiro-example", file("example"),
     settings = BuildSettings.buildSettings ++ (
       libraryDependencies ++= Seq(
         "net.liftmodules"   %% "fobo-jquery_2.6"  % "1.3"               % "compile",
