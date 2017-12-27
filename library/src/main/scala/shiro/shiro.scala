@@ -9,12 +9,12 @@ import org.apache.shiro.util.{Factory => ShiroFactory}
 import org.apache.shiro.config.IniSecurityManagerFactory
 import org.apache.shiro.mgt.SecurityManager
 
+import Utils._
+import shiro.snippet._
+
 object Shiro extends Factory {
   def init(factory: ShiroFactory[SecurityManager]){
-    
-    import Utils._
-    import shiro.snippet._
-    
+
     SecurityUtils.setSecurityManager(factory.getInstance)
     
     LiftRules.loggedInTest = Full(() => isAuthenticated)

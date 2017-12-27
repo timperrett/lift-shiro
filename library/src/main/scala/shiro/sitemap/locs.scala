@@ -1,20 +1,18 @@
 package shiro.sitemap
 
-import net.liftweb.http.S
-import shiro.{Shiro,LoginRedirect}
+import net.liftweb.common.Full
+import net.liftweb.http.{RedirectResponse, RedirectState, RedirectWithState, S}
+import net.liftweb.sitemap.Loc.{DispatchLocSnippets, EarlyResponse, If}
+import net.liftweb.sitemap.{Loc, Menu}
+import shiro.Utils._
+import shiro.{LoginRedirect, Shiro}
 
 /**
  * Lift SiteMap Integration
  */
 object Locs {
-  import net.liftweb.common.Full
-  import net.liftweb.http.{RedirectResponse, RedirectWithState, S, RedirectState}
-  import net.liftweb.sitemap.{Menu,Loc}
-  import net.liftweb.sitemap.Loc.{If,EarlyResponse,DispatchLocSnippets}
-  import shiro.Utils._
-  
   implicit def listToPath(in: List[String]): String = in.mkString("/","/","")
-  
+
   private val loginURL = Shiro.baseURL.vend ::: Shiro.loginURL.vend
   private val indexURL = Shiro.baseURL.vend ::: Shiro.indexURL.vend
   private val logoutURL = Shiro.baseURL.vend ::: Shiro.logoutURL.vend
@@ -57,7 +55,7 @@ object Locs {
   object DefaultLogin
     extends DispatchLocSnippets 
     with shiro.snippet.DefaultUsernamePasswordLogin { 
-    def dispatch = { 
+    def dispatch: DispatchIt = {
       case "login" => render 
     }
   }

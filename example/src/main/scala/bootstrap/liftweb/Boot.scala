@@ -8,10 +8,9 @@ import net.liftmodules.FoBoJQ
 
 
 class Boot {
-  def boot {
+  def boot() {
 
-    FoBoJQ.InitParam.JQuery=FoBoJQ.JQuery191
-    FoBoJQ.init()
+    FoBoJQ.Toolkit.Init=FoBoJQ.Toolkit.JQuery191
     Shiro.init()
     
     LiftRules.addToPackages("eu.getintheloop")

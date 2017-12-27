@@ -7,7 +7,7 @@ private[shiro] trait Utils {
   import net.liftweb.common.Box
   
   implicit def subject: Subject = SecurityUtils.getSubject
-  
+
   private def test(f: Subject => Boolean)(implicit subject: Subject): Boolean = f(subject)
   
   def principal[T]: Box[T] = (Box !! subject.getPrincipal).map(_.asInstanceOf[T])
