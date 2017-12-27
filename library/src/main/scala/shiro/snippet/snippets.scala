@@ -2,7 +2,6 @@ package shiro.snippet
 
 import scala.xml.NodeSeq
 import net.liftweb.http.{DispatchSnippet,S}
-import net.liftweb.util.Helpers._
 import shiro.Utils._
 
 sealed trait ShiroShippet {
@@ -14,33 +13,33 @@ sealed trait ShiroShippet {
 }
 
 trait SubjectSnippet extends DispatchSnippet with ShiroShippet {
-  def dispatch = {
+  def dispatch: DispatchIt = {
     case _ => render _
   }
   def render(xhtml: NodeSeq): NodeSeq
 }
 
 object HasRole extends SubjectSnippet {
-  def render(xhtml: NodeSeq): NodeSeq = serve(xhtml){ 
-    hasRole(_)
+  def render(xhtml: NodeSeq): NodeSeq = serve(xhtml){
+    hasRole
   }
 }
 
 object LacksRole extends SubjectSnippet {
   def render(xhtml: NodeSeq): NodeSeq = serve(xhtml){
-    lacksRole(_)
+    lacksRole
   }
 }
 
 object HasPermission extends SubjectSnippet {
   def render(xhtml: NodeSeq): NodeSeq = serve(xhtml){
-    hasPermission(_)
+    hasPermission
   }
 }
 
 object LacksPermission extends SubjectSnippet {
   def render(xhtml: NodeSeq): NodeSeq = serve(xhtml){
-    lacksPermission(_)
+    lacksPermission
   }
 }
 
